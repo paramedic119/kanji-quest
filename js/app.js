@@ -329,6 +329,7 @@
     state.currentWrite = q;
     state.writePhase = 1;
     modelAnswer.hidden = false; // Phase 1: お手本を見ながらなぞる
+    document.getElementById("btn-write-ok").textContent = "✓ かけた！";
     document.getElementById("btn-write-ok").hidden = true;
     document.getElementById("btn-write-ng").textContent = "なぞれた！";
     document.getElementById("btn-model").hidden = true;
@@ -340,7 +341,11 @@
     if (!q) return;
     if (ok) {
       if (!state.hasInk) { toast("じぶんで かいてから「かけた！」をおそう"); return; }
-      onCorrect(q);
+      // Phase 3: お手本を重ねて自己採点
+      modelAnswer.hidden = false;
+      state.writePhase = 3;
+      document.getElementById("btn-write-ok").textContent = "○ あってた！";
+      document.getElementById("btn-write-ng").textContent = "✗ まちがえた";
     } else {
       modelAnswer.hidden = false; // お手本を見せてから再挑戦
       onWrong(q, false);          // 書きは自己申告なので体力は減らさない
@@ -586,7 +591,10 @@
     document.getElementById("btn-model").addEventListener("click", function () {
       modelAnswer.hidden = !modelAnswer.hidden;
     });
-    document.getElementById("btn-write-ok").addEventListener("click", function () { submitWrite(true); });
+    document.getElementById("btn-write-ok").addEventListener("click", function () {
+      if (state.writePhase === 3) { onCorrect(state.currentWrite); }
+      else { submitWrite(true); }
+    });
     document.getElementById("btn-write-ng").addEventListener("click", function () {
       if (state.writePhase === 1) {
         if (!state.hasInk) { toast("なぞってから おそう！"); return; }
@@ -596,6 +604,8 @@
         document.getElementById("btn-write-ok").hidden = false;
         document.getElementById("btn-write-ng").textContent = "もういちど";
         document.getElementById("btn-model").hidden = false;
+      } else if (state.writePhase === 3) {
+        onWrong(state.currentWrite, false);
       } else {
         submitWrite(false);
       }
