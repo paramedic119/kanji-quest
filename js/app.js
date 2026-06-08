@@ -199,18 +199,18 @@
   function buildQuestions(chars, mode) {
     var qs = [];
     if (mode === "final") {
-      var pool = shuffle(Object.keys(KANJI)).slice(0, 20);
-      pool.forEach(function (ch) {
+      Object.keys(KANJI).forEach(function (ch) {
         qs.push({ char: ch, mode: Math.random() < 0.5 ? "read" : "write" });
       });
-      return qs;
+      return shuffle(qs); // 全53字・総まとめ
     }
     chars.forEach(function (ch) {
       qs.push({ char: ch, mode: "read" });
+      qs.push({ char: ch, mode: "read" }); // 読みは2回出題
       qs.push({ char: ch, mode: "write" });
     });
     qs = shuffle(qs);
-    if (qs.length > 16) qs = qs.slice(0, 16); // 1回の戦闘を遊びやすい長さに
+    if (qs.length > 24) qs = qs.slice(0, 24);
     return qs;
   }
 
@@ -307,6 +307,7 @@
       Array.prototype.forEach.call(btns, function (b) {
         if (b.textContent === correct) b.classList.add("correct");
       });
+      toast("せいかいは「" + correct + "」！");
       onWrong(q, true);
     }
   }
@@ -376,7 +377,7 @@
     if (b.heroHp <= 0) {
       setTimeout(function () { endBattle(false); }, 900);
     } else {
-      setTimeout(nextQuestion, costHp ? 1100 : 950);
+      setTimeout(nextQuestion, costHp ? 1800 : 950);
     }
   }
 
