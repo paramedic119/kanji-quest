@@ -325,9 +325,13 @@
       s.textContent = ans.charAt(i);
       modelAnswer.appendChild(s); // 1文字＝1マス（十字の中心に配置）
     }
-    modelAnswer.hidden = true;
     canvasWrap.style.setProperty("--cells", ans.length);
     state.currentWrite = q;
+    state.writePhase = 1;
+    modelAnswer.hidden = false; // Phase 1: お手本を見ながらなぞる
+    document.getElementById("btn-write-ok").hidden = true;
+    document.getElementById("btn-write-ng").textContent = "なぞれた！";
+    document.getElementById("btn-model").hidden = true;
     requestAnimationFrame(function () { setupCanvas(); clearCanvas(); });
   }
 
@@ -583,7 +587,19 @@
       modelAnswer.hidden = !modelAnswer.hidden;
     });
     document.getElementById("btn-write-ok").addEventListener("click", function () { submitWrite(true); });
-    document.getElementById("btn-write-ng").addEventListener("click", function () { submitWrite(false); });
+    document.getElementById("btn-write-ng").addEventListener("click", function () {
+      if (state.writePhase === 1) {
+        if (!state.hasInk) { toast("なぞってから おそう！"); return; }
+        modelAnswer.hidden = true;
+        clearCanvas();
+        state.writePhase = 2;
+        document.getElementById("btn-write-ok").hidden = false;
+        document.getElementById("btn-write-ng").textContent = "もういちど";
+        document.getElementById("btn-model").hidden = false;
+      } else {
+        submitWrite(false);
+      }
+    });
 
     document.getElementById("btn-result-next").addEventListener("click", function () {
       var b = state.battle;
