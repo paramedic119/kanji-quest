@@ -1,0 +1,15 @@
+# OS / エディタ
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# テスト・デバッグの生成物
+.playwright-mcp/
+test-results/
+playwright-report/
+
+# ルート直下のスクリーンショット（icons/ の中は除外しない）
+/*.png
+/*.jpeg
+/*.jpg

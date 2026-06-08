@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>漢字クエスト ｜ 小4漢字の冒険</title>
+<meta name="theme-color" content="#0b1026" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="漢字クエスト" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="icons/icon-180.png" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== ホーム ===== -->
+  <section id="screen-home" class="screen active">
+    <h1 class="game-title">漢字<span class="accent">クエスト</span></h1>
+    <p class="subtitle">小学４年 かんじの ぼうけん</p>
+
+    <div class="hero-card">
+      <div class="hero-avatar" id="hero-avatar">🦸</div>
+      <div class="hero-info">
+        <div class="hero-line"><span class="lv-badge">Lv.<span id="hero-level">1</span></span><span id="hero-title-text">みならい けんし</span></div>
+        <div class="bar exp-bar"><div class="bar-fill exp" id="exp-fill"></div><span class="bar-label" id="exp-label">EXP 0</span></div>
+        <div class="bar hp-bar"><div class="bar-fill hp" id="home-hp-fill"></div><span class="bar-label">たいりょく</span></div>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num"><span id="stat-streak">0</span><small>日</small></div><div class="stat-cap">🔥 れんぞく</div></div>
+      <div class="stat"><div class="stat-num"><span id="stat-learned">0</span><small>/53</small></div><div class="stat-cap">📖 おぼえた字</div></div>
+      <div class="stat"><div class="stat-num"><span id="stat-acc">--</span><small>%</small></div><div class="stat-cap">🎯 せいかい率</div></div>
+    </div>
+
+    <div class="countdown" id="countdown">本番テストまで <b id="days-left">--</b> 日</div>
+
+    <div class="home-actions">
+      <button class="btn btn-primary big" id="btn-adventure">⚔️ ぼうけんに でる</button>
+      <div class="btn-grid">
+        <button class="btn btn-weak" id="btn-weak">🔁 弱点とっくん</button>
+        <button class="btn btn-dex" id="btn-dex">📚 かんじずかん</button>
+      </div>
+    </div>
+    <p class="tiny-note" id="weak-note"></p>
+  </section>
+
+  <!-- ===== ステージマップ ===== -->
+  <section id="screen-map" class="screen">
+    <div class="topbar"><button class="btn-back" data-go="home">‹ もどる</button><h2>ステージをえらぶ</h2></div>
+    <div id="chapter-list" class="chapter-list"></div>
+  </section>
+
+  <!-- ===== バトル ===== -->
+  <section id="screen-battle" class="screen">
+    <div class="battle-top">
+      <button class="btn-back small" data-go="map">‹</button>
+      <div class="enemy">
+        <div class="enemy-name" id="enemy-name">てき</div>
+        <div class="bar enemy-hp-bar"><div class="bar-fill enemy-hp" id="enemy-hp-fill"></div></div>
+      </div>
+      <div class="combo" id="combo-box"></div>
+    </div>
+
+    <div class="stage-fx" id="stage-fx">
+      <div class="enemy-sprite" id="enemy-sprite">👾</div>
+      <div class="hit-float" id="hit-float"></div>
+    </div>
+
+    <div class="question-area">
+      <!-- 読み問題 -->
+      <div id="panel-read" class="qpanel">
+        <div class="q-tag">よみ</div>
+        <div class="q-word" id="read-word">　</div>
+        <div class="q-prompt">この ことばの よみは？</div>
+        <div class="choices" id="read-choices"></div>
+      </div>
+      <!-- 書き問題 -->
+      <div id="panel-write" class="qpanel" hidden>
+        <div class="q-tag write">かき</div>
+        <div class="q-hint">「<span id="write-hint">　</span>」を かん字で かこう</div>
+        <div class="canvas-wrap">
+          <canvas id="write-canvas" width="600" height="300"></canvas>
+          <div class="model-answer" id="model-answer" hidden></div>
+        </div>
+        <div class="write-tools">
+          <button class="btn small" id="btn-model">👀 お手本</button>
+          <button class="btn small" id="btn-clear">🧽 けす</button>
+        </div>
+        <div class="write-judge">
+          <button class="btn btn-ng" id="btn-write-ng">もういちど</button>
+          <button class="btn btn-ok" id="btn-write-ok">✓ かけた！</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="battle-bottom">
+      <div class="hero-mini">🦸 たいりょく</div>
+      <div class="bar hp-bar"><div class="bar-fill hp" id="battle-hp-fill"></div></div>
+    </div>
+  </section>
+
+  <!-- ===== 結果 ===== -->
+  <section id="screen-result" class="screen">
+    <div class="result-card">
+      <div class="result-emoji" id="result-emoji">🎉</div>
+      <h2 id="result-title">クリア！</h2>
+      <p id="result-sub"></p>
+      <div class="result-rewards" id="result-rewards"></div>
+      <div id="levelup-banner" class="levelup-banner" hidden>⭐ レベルアップ！ ⭐</div>
+      <div class="result-actions">
+        <button class="btn btn-primary" id="btn-result-next">つづける</button>
+        <button class="btn" data-go="map">マップへ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== かんじずかん ===== -->
+  <section id="screen-dex" class="screen">
+    <div class="topbar"><button class="btn-back" data-go="home">‹ もどる</button><h2>かんじずかん</h2></div>
+    <p class="dex-legend">ぴかぴか＝おぼえた字 ／ 黒＝これから</p>
+    <div id="dex-grid" class="dex-grid"></div>
+  </section>
+
+</div>
+
+<div id="toast" class="toast" hidden></div>
+<div id="fx-layer" class="fx-layer"></div>
+
+<script src="js/kanji-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
