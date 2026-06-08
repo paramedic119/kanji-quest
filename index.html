@@ -4,7 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
 <title>漢字クエスト ｜ 小4漢字の冒険</title>
-<meta name="theme-color" content="#0b1026" />
+<meta name="theme-color" content="#6aa0ff" />
+<meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="漢字クエスト" />
@@ -25,7 +26,7 @@
       <div class="hero-info">
         <div class="hero-line"><span class="lv-badge">Lv.<span id="hero-level">1</span></span><span id="hero-title-text">みならい けんし</span></div>
         <div class="bar exp-bar"><div class="bar-fill exp" id="exp-fill"></div><span class="bar-label" id="exp-label">EXP 0</span></div>
-        <div class="bar hp-bar"><div class="bar-fill hp" id="home-hp-fill"></div><span class="bar-label">たいりょく</span></div>
+        <div class="hearts" id="home-hearts"></div>
       </div>
     </div>
 
@@ -65,7 +66,7 @@
     </div>
 
     <div class="stage-fx" id="stage-fx">
-      <div class="enemy-sprite" id="enemy-sprite">👾</div>
+      <img class="enemy-sprite" id="enemy-sprite" alt="てき" />
       <div class="hit-float" id="hit-float"></div>
     </div>
 
@@ -97,8 +98,8 @@
     </div>
 
     <div class="battle-bottom">
-      <div class="hero-mini">🦸 たいりょく</div>
-      <div class="bar hp-bar"><div class="bar-fill hp" id="battle-hp-fill"></div></div>
+      <div class="hero-mini">たいりょく</div>
+      <div class="hearts" id="battle-hearts"></div>
     </div>
   </section>
 

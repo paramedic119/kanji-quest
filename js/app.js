@@ -30,7 +30,9 @@
   var canvasWrap = document.querySelector(".canvas-wrap");
   var canvas = document.getElementById("write-canvas");
 
-  var ENEMY_SPRITES = ["🐀", "🦔", "🦎", "🦇", "👻", "🐗", "🦅", "🟩", "🦁", "🤖"];
+  // 章ごとのドット絵モブ（img/mob_<name>.png）。final=ボス、weak=むらさきスライム
+  var MOBS = ["creeper", "zombie", "skeleton", "spider", "slime", "enderman", "pig", "sheep", "ghast", "bee"];
+  function mobSrc(name) { return "img/mob_" + name + ".png"; }
 
   var state = load();
   var ctx = null;
@@ -98,6 +100,16 @@
     var el = document.getElementById(id);
     if (el) el.style.width = Math.max(0, Math.min(100, pct)) + "%";
   }
+  // たいりょくをドット絵ハートで表示（cur個=満タン、残り=空）
+  function renderHearts(id, cur, max, cap) {
+    var box = document.getElementById(id);
+    if (!box) return;
+    var html = cap ? '<span class="hp-cap">' + cap + "</span>" : "";
+    for (var i = 0; i < max; i++) {
+      html += '<img src="img/heart_' + (i < cur ? "full" : "empty") + '.png" alt="" />';
+    }
+    box.innerHTML = html;
+  }
 
   // ===== 画面切替 =====
   function go(name) {
@@ -113,7 +125,7 @@
     var need = needExp(state.level);
     setBar("exp-fill", state.exp / need * 100);
     document.getElementById("exp-label").textContent = "EXP " + state.exp + " / " + need;
-    setBar("home-hp-fill", 100);
+    renderHearts("home-hearts", maxHp(), maxHp(), "たいりょく");
     document.getElementById("stat-streak").textContent = state.streak;
     document.getElementById("stat-learned").textContent = learnedCount();
     document.getElementById("stat-acc").textContent = accuracy();
@@ -147,7 +159,7 @@
       if (cleared) card.classList.add("cleared");
       if (!unlocked) card.classList.add("locked");
       card.innerHTML =
-        '<div class="ch-emoji">' + ch.emoji + '</div>' +
+        '<img class="ch-emoji" src="' + mobSrc(MOBS[ch.id - 1] || "creeper") + '" alt="" />' +
         '<div class="ch-title">' + ch.id + '. ' + ch.title + '</div>' +
         '<div class="ch-pages">P.' + ch.pages + ' ・ ' + ch.chars.length + '字</div>' +
         '<div class="ch-chars">' + ch.chars.join("") + '</div>' +
@@ -162,7 +174,7 @@
     if (state.finalCleared) f.classList.add("cleared");
     if (!funlocked) f.classList.add("locked");
     f.innerHTML =
-      '<div class="ch-emoji">' + FINAL_BOSS.emoji + '</div>' +
+      '<img class="ch-emoji" src="' + mobSrc("boss") + '" alt="" />' +
       '<div class="ch-title">' + FINAL_BOSS.title + '</div>' +
       '<div class="ch-pages">ぜんぶの 漢字から しゅつだい</div>' +
       '<div class="ch-chars">' + FINAL_BOSS.boss + '</div>' +
@@ -208,16 +220,16 @@
     if (type === "final") {
       queue = buildQuestions(null, "final");
       enemyName = FINAL_BOSS.boss;
-      sprite = FINAL_BOSS.emoji;
+      sprite = "boss";
     } else if (type === "weak") {
       queue = buildQuestions(Object.keys(state.weak), "mix");
       enemyName = "にがて まじん";
-      sprite = "👹";
+      sprite = "weak";
     } else {
       var ch = CHAPTERS[chapterId - 1];
       queue = buildQuestions(ch.chars, "mix");
       enemyName = ch.boss;
-      sprite = ENEMY_SPRITES[chapterId - 1] || "👾";
+      sprite = MOBS[chapterId - 1] || "creeper";
     }
 
     state.battle = {
@@ -237,7 +249,7 @@
 
     document.getElementById("enemy-name").textContent = enemyName;
     var spr = document.getElementById("enemy-sprite");
-    spr.textContent = sprite;
+    spr.src = mobSrc(sprite);
     spr.classList.remove("defeated", "hit");
     document.getElementById("combo-box").textContent = "";
     updateBars();
@@ -248,7 +260,7 @@
   function updateBars() {
     var b = state.battle;
     setBar("enemy-hp-fill", b.enemyHp / b.enemyMaxHp * 100);
-    setBar("battle-hp-fill", b.heroHp / b.heroMaxHp * 100);
+    renderHearts("battle-hearts", b.heroHp, b.heroMaxHp);
   }
 
   function nextQuestion() {
