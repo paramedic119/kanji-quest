@@ -580,6 +580,13 @@
       });
     });
 
+    document.getElementById("btn-reset").addEventListener("click", function () {
+      if (!confirm("ぜんぶの きろくを けします。\nほんとうに よい？")) return;
+      localStorage.removeItem(SAVE_KEY);
+      state = Object.assign({}, defaultState);
+      renderHome();
+      toast("リセット かんりょう！");
+    });
     document.getElementById("btn-adventure").addEventListener("click", function () { renderMap(); go("map"); });
     document.getElementById("btn-dex").addEventListener("click", function () { renderDex(); go("dex"); });
     document.getElementById("btn-weak").addEventListener("click", function () {

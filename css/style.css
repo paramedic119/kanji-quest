@@ -165,6 +165,8 @@ body::after {
 .home-actions { display: flex; flex-direction: column; gap: 12px; }
 .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .tiny-note { text-align: center; color: #24406d; font-size: 13px; min-height: 18px; margin-top: 12px; text-shadow: 1px 1px 0 rgba(255,255,255,.35); }
+.btn-reset { display: block; margin: 14px auto 0; font-size: 11px; padding: 5px 14px; background: transparent; border-color: #3a3a3a; color: var(--muted); opacity: .45; }
+.btn-reset:hover, .btn-reset:active { opacity: .9; }
 
 /* トップバー */
 .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
