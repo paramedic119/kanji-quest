@@ -318,7 +318,12 @@
     var data = KANJI[q.char];
     writeHint.textContent = data.write[0];
     var ans = data.write[1];
-    modelAnswer.textContent = ans;
+    modelAnswer.innerHTML = "";
+    for (var i = 0; i < ans.length; i++) {
+      var s = document.createElement("span");
+      s.textContent = ans.charAt(i);
+      modelAnswer.appendChild(s); // 1文字＝1マス（十字の中心に配置）
+    }
     modelAnswer.hidden = true;
     canvasWrap.style.setProperty("--cells", ans.length);
     state.currentWrite = q;

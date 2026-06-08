@@ -253,7 +253,8 @@ body::after {
   box-shadow: inset 3px 3px 0 rgba(0,0,0,.5);
 }
 #write-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; }
-.model-answer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; color: rgba(106,190,48,.32); font-size: clamp(90px, 30vw, 200px); pointer-events: none; }
+.model-answer { position: absolute; inset: 0; display: flex; pointer-events: none; }
+.model-answer span { flex: 1 1 0; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-weight: 700; color: rgba(106,190,48,.32); font-size: clamp(80px, 22vw, 160px); line-height: 1; }
 .model-answer[hidden] { display: none; }
 .write-tools { display: flex; gap: 10px; justify-content: center; margin: 12px 0 8px; }
 .write-judge { display: flex; gap: 12px; }
