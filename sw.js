@@ -1,5 +1,5 @@
 // 漢字クエスト ｜ オフライン用 Service Worker
-var CACHE = "kanji-quest-v8";
+var CACHE = "kanji-quest-v9";
 var ASSETS = [
   "./",
   "./index.html",
